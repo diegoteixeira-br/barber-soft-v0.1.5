@@ -172,9 +172,9 @@ const LGPD = () => {
                 solicitações relacionadas à LGPD e garantir a conformidade da empresa.
               </p>
               <div className="bg-muted p-4 rounded-lg">
-                <p><strong>Nome:</strong> Equipe de Privacidade BarberSoft</p>
-                <p><strong>E-mail:</strong> dpo@barbersoft.com.br</p>
-                <p><strong>Endereço:</strong> Av. Paulista, 1000 - São Paulo/SP</p>
+                <p><strong>Nome:</strong> Equipe DT Soluções Digital</p>
+                <p><strong>E-mail:</strong> contato@dtsolucoesdigital.com.br</p>
+                <p><strong>Endereço:</strong> Rua F. V de Azevedo, 07 - Cohab Nova, Cáceres-MT</p>
               </div>
             </CardContent>
           </Card>

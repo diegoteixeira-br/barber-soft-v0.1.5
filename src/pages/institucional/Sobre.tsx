@@ -121,11 +121,44 @@ const Sobre = () => {
           </div>
         </section>
 
-        <section className="bg-muted p-8 rounded-xl text-center">
+        <section className="bg-muted p-8 rounded-xl text-center mb-16">
           <h2 className="text-2xl font-bold mb-4">Faça parte dessa transformação</h2>
           <p className="text-muted-foreground mb-2">
             Junte-se a milhares de barbearias que já utilizam o BarberSoft.
           </p>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold mb-8 text-center">Quem Somos</h2>
+          <Card>
+            <CardContent className="pt-8">
+              <p className="text-muted-foreground mb-4">
+                O BarberSoft é desenvolvido pela <strong>DT Soluções Digital</strong>, uma empresa focada 
+                em criar soluções tecnológicas inovadoras para automatização de processos empresariais.
+              </p>
+              <p className="text-muted-foreground mb-6">
+                Nossa plataforma foi construída utilizando tecnologia <strong>Lovable</strong>, garantindo 
+                uma experiência moderna, rápida e confiável para nossos usuários.
+              </p>
+              <div className="bg-background p-6 rounded-lg border">
+                <h3 className="font-semibold mb-4">Informações da Empresa</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p><strong>Razão Social:</strong> DT Soluções Digital - MEI</p>
+                    <p><strong>CNPJ:</strong> 63.266.334/0001-21</p>
+                  </div>
+                  <div>
+                    <p><strong>Endereço:</strong> Rua F. V de Azevedo, 07</p>
+                    <p>Bairro Cohab Nova - Cáceres/MT</p>
+                  </div>
+                  <div>
+                    <p><strong>E-mail:</strong> contato@dtsolucoesdigital.com.br</p>
+                    <p><strong>WhatsApp:</strong> (65) 99302-5105</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </section>
       </article>
     </InstitutionalLayout>

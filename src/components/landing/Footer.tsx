@@ -176,7 +176,14 @@ export function Footer() {
             © 2024 BarberSoft. Todos os direitos reservados.
           </p>
           <p className="text-sm text-muted-foreground">
-            Feito com ❤️ para barbearias brasileiras
+            Desenvolvido por{' '}
+            <a href="https://dtsolucoesdigital.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
+              DT Soluções Digital
+            </a>
+            {' '}com{' '}
+            <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
+              Lovable
+            </a>
           </p>
         </div>
       </div>

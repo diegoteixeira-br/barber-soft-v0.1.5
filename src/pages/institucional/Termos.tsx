@@ -192,7 +192,7 @@ const Termos = () => {
           <h2>13. Disposições Gerais</h2>
           <ul>
             <li><strong>Legislação:</strong> Estes Termos são regidos pelas leis brasileiras</li>
-            <li><strong>Foro:</strong> Foro da Comarca de São Paulo/SP</li>
+            <li><strong>Foro:</strong> Foro da Comarca de Cáceres/MT</li>
             <li><strong>Integralidade:</strong> Estes Termos constituem o acordo integral entre as partes</li>
             <li><strong>Renúncia:</strong> A não exigência de qualquer direito não constitui renúncia</li>
           </ul>
@@ -204,8 +204,8 @@ const Termos = () => {
             Para dúvidas sobre estes Termos:
           </p>
           <ul>
-            <li><strong>E-mail:</strong> juridico@barbersoft.com.br</li>
-            <li><strong>Endereço:</strong> Av. Paulista, 1000 - São Paulo/SP</li>
+            <li><strong>E-mail:</strong> contato@dtsolucoesdigital.com.br</li>
+            <li><strong>Endereço:</strong> Rua F. V de Azevedo, 07 - Cohab Nova, Cáceres-MT</li>
           </ul>
         </section>
       </article>

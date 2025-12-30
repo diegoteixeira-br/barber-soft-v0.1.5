@@ -27,8 +27,8 @@ const Contato = () => {
     mainEntity: {
       '@type': 'Organization',
       name: 'BarberSoft',
-      email: 'contato@barbersoft.com.br',
-      telephone: '+55-11-99999-9999'
+      email: 'contato@dtsolucoesdigital.com.br',
+      telephone: '+55-65-99302-5105'
     }
   };
 
@@ -56,8 +56,8 @@ const Contato = () => {
               <CardTitle className="mb-2">WhatsApp</CardTitle>
               <CardDescription className="mb-4">Atendimento rápido e direto</CardDescription>
               <Button variant="outline" className="w-full" asChild>
-                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
-                  (11) 99999-9999
+                <a href="https://wa.me/5565993025105" target="_blank" rel="noopener noreferrer">
+                  (65) 99302-5105
                 </a>
               </Button>
             </CardContent>
@@ -68,8 +68,8 @@ const Contato = () => {
               <CardTitle className="mb-2">E-mail</CardTitle>
               <CardDescription className="mb-4">Para dúvidas e parcerias</CardDescription>
               <Button variant="outline" className="w-full" asChild>
-                <a href="mailto:contato@barbersoft.com.br">
-                  contato@barbersoft.com.br
+                <a href="mailto:contato@dtsolucoesdigital.com.br">
+                  contato@dtsolucoesdigital.com.br
                 </a>
               </Button>
             </CardContent>
@@ -162,8 +162,8 @@ const Contato = () => {
                   <div>
                     <h4 className="font-semibold mb-1">Endereço</h4>
                     <p className="text-sm text-muted-foreground">
-                      Av. Paulista, 1000 - Bela Vista<br />
-                      São Paulo - SP, 01310-100
+                      Rua F. V de Azevedo, 07 - Cohab Nova<br />
+                      Cáceres - MT
                     </p>
                   </div>
                 </div>

@@ -138,7 +138,7 @@ const Privacidade = () => {
           </ul>
           <p>
             Para exercer seus direitos, entre em contato pelo e-mail: 
-            <a href="mailto:privacidade@barbersoft.com.br"> privacidade@barbersoft.com.br</a>
+            <a href="mailto:contato@dtsolucoesdigital.com.br"> contato@dtsolucoesdigital.com.br</a>
           </p>
         </section>
 
@@ -171,9 +171,9 @@ const Privacidade = () => {
             Para dúvidas sobre esta política ou tratamento de dados:
           </p>
           <ul>
-            <li><strong>E-mail:</strong> privacidade@barbersoft.com.br</li>
-            <li><strong>Encarregado de Dados (DPO):</strong> dpo@barbersoft.com.br</li>
-            <li><strong>Endereço:</strong> Av. Paulista, 1000 - São Paulo/SP</li>
+            <li><strong>E-mail:</strong> contato@dtsolucoesdigital.com.br</li>
+            <li><strong>Encarregado de Dados (DPO):</strong> contato@dtsolucoesdigital.com.br</li>
+            <li><strong>Endereço:</strong> Rua F. V de Azevedo, 07 - Cohab Nova, Cáceres-MT</li>
           </ul>
         </section>
       </article>
