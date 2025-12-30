@@ -5,10 +5,10 @@ import { Bot, Clock, MessageCircle, Calendar, Bell, UserCheck, Gift, RefreshCcw 
 const features = [
   { icon: Clock, text: "Responde 24 horas por dia" },
   { icon: Calendar, text: "Agenda automaticamente" },
-  { icon: Bell, text: "Confirma presença" },
-  { icon: Gift, text: "Lembra aniversários" },
-  { icon: RefreshCcw, text: "Resgata clientes inativos" },
-  { icon: UserCheck, text: "Envia lembretes" },
+  { icon: Bell, text: "Confirma presença dos clientes" },
+  { icon: Gift, text: "Identifica aniversariantes do dia" },
+  { icon: RefreshCcw, text: "Campanhas para clientes inativos" },
+  { icon: UserCheck, text: "Ferramentas de marketing" },
 ];
 
 export function SolutionSection() {
@@ -39,9 +39,9 @@ export function SolutionSection() {
             </h2>
 
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Ele responde 24h, agenda, confirma presença, lembra aniversários e resgata clientes inativos.{" "}
+              Ele responde 24h, agenda e confirma presença automaticamente.{" "}
               <span className="text-foreground font-medium">
-                Tudo automático no WhatsApp da sua barbearia.
+                Organize campanhas de aniversário e reative clientes inativos com facilidade.
               </span>
             </p>
 
@@ -71,7 +71,7 @@ export function SolutionSection() {
                 ))}
               </div>
               <p className="text-sm text-muted-foreground">
-                <span className="text-foreground font-semibold">Redução de 80%</span> nas faltas com lembretes automáticos
+                <span className="text-foreground font-semibold">Redução de 80%</span> nas faltas com confirmação de presença
               </p>
             </div>
           </div>
