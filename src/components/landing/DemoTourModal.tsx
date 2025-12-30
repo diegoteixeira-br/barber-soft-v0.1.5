@@ -663,9 +663,22 @@ export const DemoTourModal = ({ open, onOpenChange }: DemoTourModalProps) => {
           </div>
           
           <div className="flex items-center gap-2">
-            {/* Audio loading indicator */}
+            {/* Audio loading indicator - animated sound wave */}
             {isLoadingAudio && (
-              <Loader2 className="w-4 h-4 text-primary animate-spin" />
+              <div className="flex items-center gap-0.5 px-2 py-1 rounded-full bg-primary/10">
+                {[0, 1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-primary rounded-full animate-pulse"
+                    style={{
+                      height: `${8 + (i % 2) * 6}px`,
+                      animationDelay: `${i * 150}ms`,
+                      animationDuration: '0.6s',
+                    }}
+                  />
+                ))}
+                <span className="text-xs text-primary ml-2">Carregando...</span>
+              </div>
             )}
             
             {/* Mute/Unmute button */}
