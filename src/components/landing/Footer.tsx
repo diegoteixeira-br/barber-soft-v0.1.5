@@ -5,17 +5,14 @@ const footerLinks = {
   produto: [
     { name: "Funcionalidades", href: "#funcionalidades", isExternal: true },
     { name: "Preços", href: "#precos", isExternal: true },
-    { name: "API", href: "/api", isExternal: false },
   ],
   empresa: [
     { name: "Sobre nós", href: "/sobre", isExternal: false },
     { name: "Blog", href: "/blog", isExternal: false },
-    { name: "Carreiras", href: "/carreiras", isExternal: false },
     { name: "Contato", href: "/contato", isExternal: false },
   ],
   suporte: [
     { name: "Central de Ajuda", href: "/ajuda", isExternal: false },
-    { name: "Documentação", href: "/documentacao", isExternal: false },
     { name: "Status", href: "/status", isExternal: false },
     { name: "WhatsApp", href: "/whatsapp", isExternal: false },
   ],
