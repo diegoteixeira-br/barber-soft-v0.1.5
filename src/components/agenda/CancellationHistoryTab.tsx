@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { format, subDays, startOfMonth, endOfMonth } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Calendar, AlertTriangle, UserX, Phone, DollarSign, Trash2, Filter } from "lucide-react";
+import { Calendar, AlertTriangle, UserX, Phone, DollarSign, Trash2, Filter, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,7 +86,7 @@ export function CancellationHistoryTab() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
@@ -190,8 +190,12 @@ export function CancellationHistoryTab() {
             <TableBody>
               {records.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
-                    Nenhum cancelamento encontrado
+                  <TableCell colSpan={10} className="text-center py-12">
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <CheckCircle2 className="h-8 w-8 text-green-500" />
+                      <span className="font-medium text-foreground">Ótimo! Nenhum cancelamento</span>
+                      <span className="text-sm">Não há cancelamentos registrados no período selecionado</span>
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (
