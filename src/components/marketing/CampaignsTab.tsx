@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Send, Users, Cake, UserX, Search, CheckSquare, Square, Building2, Settings, Save, Scissors, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { Send, Users, Cake, UserX, Search, CheckSquare, Square, Building2, Settings, Save, Scissors, Loader2, ImagePlus, X } from "lucide-react";
 import { MessageTemplatesModal } from "./MessageTemplatesModal";
 import { TemplateSelector } from "./TemplateSelector";
 import { useMessageTemplates } from "@/hooks/useMessageTemplates";
@@ -44,6 +44,10 @@ export function CampaignsTab() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [templatesModalOpen, setTemplatesModalOpen] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState<string>("");
+  const [mediaType, setMediaType] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { createTemplate } = useMessageTemplates();
   const { units } = useUnits();
@@ -86,6 +90,64 @@ export function CampaignsTab() {
       newSelected.add(id);
     }
     setSelectedBarberIds(newSelected);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Apenas imagens são permitidas", variant: "destructive" });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "Imagem muito grande (máx. 5MB)", variant: "destructive" });
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({ title: "Usuário não autenticado", variant: "destructive" });
+        return;
+      }
+
+      const fileName = `${user.id}/${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage
+        .from("campaign-media")
+        .upload(fileName, file);
+
+      if (error) {
+        console.error("Upload error:", error);
+        toast({ title: "Erro ao fazer upload", description: error.message, variant: "destructive" });
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("campaign-media")
+        .getPublicUrl(data.path);
+
+      setMediaUrl(urlData.publicUrl);
+      setMediaType(file.type);
+      toast({ title: "Imagem anexada!" });
+    } catch (err) {
+      console.error("Upload error:", err);
+      toast({ title: "Erro ao fazer upload", variant: "destructive" });
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const removeImage = () => {
+    setMediaUrl("");
+    setMediaType("");
   };
 
   const selectAll = () => {
@@ -172,6 +234,8 @@ export function CampaignsTab() {
             unit_id: unitId,
             message_template: message,
             targets,
+            media_url: mediaUrl || undefined,
+            media_type: mediaType || undefined,
           },
         });
 
@@ -207,6 +271,8 @@ export function CampaignsTab() {
         } else {
           setSelectedBarberIds(new Set());
         }
+        setMediaUrl("");
+        setMediaType("");
         setMessage("");
       } else {
         // All success
@@ -219,6 +285,8 @@ export function CampaignsTab() {
         } else {
           setSelectedBarberIds(new Set());
         }
+        setMediaUrl("");
+        setMediaType("");
         setMessage("");
       }
     } catch (err) {
@@ -462,12 +530,57 @@ export function CampaignsTab() {
               placeholder="Olá {{nome}}! Temos uma promoção especial para você..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="min-h-[200px] resize-none"
+              className="min-h-[160px] resize-none"
             />
+
+            {/* Image Upload Section */}
+            <div className="space-y-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              
+              {mediaUrl ? (
+                <div className="relative inline-block">
+                  <img 
+                    src={mediaUrl} 
+                    alt="Imagem anexada" 
+                    className="h-24 w-auto rounded-lg border object-cover"
+                  />
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="absolute -right-2 -top-2 h-6 w-6"
+                    onClick={removeImage}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                >
+                  {isUploading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...</>
+                  ) : (
+                    <><ImagePlus className="mr-2 h-4 w-4" /> Anexar Imagem</>
+                  )}
+                </Button>
+              )}
+            </div>
 
             {message && totalSelected > 0 && (
               <div className="rounded-lg border border-dashed p-3">
                 <p className="mb-2 text-xs font-medium text-muted-foreground">Prévia:</p>
+                {mediaUrl && (
+                  <img src={mediaUrl} alt="Preview" className="mb-2 h-16 w-auto rounded object-cover" />
+                )}
                 <p className="text-sm">
                   {message.replace(/\{\{nome\}\}/g, previewName || "Destinatário")}
                 </p>
