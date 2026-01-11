@@ -1,6 +1,74 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// === INPUT VALIDATION UTILITIES ===
+// Maximum length constraints to prevent DoS via oversized inputs
+const MAX_NAME_LENGTH = 200;
+const MAX_PHONE_LENGTH = 20;
+const MAX_NOTES_LENGTH = 1000;
+const MAX_TAGS_COUNT = 10;
+const MAX_TAG_LENGTH = 50;
+
+// Validation helper functions
+function validateStringLength(value: string | null | undefined, maxLength: number, fieldName: string): { valid: boolean; error?: string } {
+  if (!value) return { valid: true };
+  if (typeof value !== 'string') return { valid: false, error: `${fieldName} deve ser texto` };
+  if (value.length > maxLength) return { valid: false, error: `${fieldName} excede o limite de ${maxLength} caracteres` };
+  return { valid: true };
+}
+
+function validatePhone(phone: string | null | undefined): { valid: boolean; normalized?: string; error?: string } {
+  if (!phone) return { valid: true };
+  // Remove non-digits
+  const normalized = phone.replace(/\D/g, '');
+  // Brazilian phone: 10-11 digits (with area code), allow 12-13 with country code
+  if (normalized.length < 10 || normalized.length > 13) {
+    return { valid: false, error: 'Telefone deve ter entre 10 e 13 dígitos' };
+  }
+  return { valid: true, normalized };
+}
+
+function validateTags(tags: any): { valid: boolean; sanitized?: string[]; error?: string } {
+  if (!tags) return { valid: true, sanitized: [] };
+  if (!Array.isArray(tags)) return { valid: false, error: 'Tags deve ser um array' };
+  if (tags.length > MAX_TAGS_COUNT) return { valid: false, error: `Máximo de ${MAX_TAGS_COUNT} tags permitidas` };
+  
+  const sanitized: string[] = [];
+  for (const tag of tags) {
+    if (typeof tag !== 'string') continue;
+    const trimmed = tag.trim().substring(0, MAX_TAG_LENGTH);
+    if (trimmed) sanitized.push(trimmed);
+  }
+  return { valid: true, sanitized };
+}
+
+function validateDate(dateStr: string | null | undefined): { valid: boolean; error?: string } {
+  if (!dateStr) return { valid: true };
+  // Basic date format validation
+  const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?)?/;
+  if (!dateRegex.test(dateStr)) {
+    return { valid: false, error: 'Formato de data inválido. Use YYYY-MM-DD ou YYYY-MM-DDTHH:MM' };
+  }
+  return { valid: true };
+}
+
+// Sanitize text input - remove potentially dangerous characters
+function sanitizeText(text: string): string {
+  if (!text) return text;
+  // Remove null bytes and trim
+  return text.replace(/\0/g, '').trim();
+}
+
+// Generic error messages - never expose internal details
+const GENERIC_ERRORS = {
+  database: 'Erro ao processar solicitação',
+  notFound: 'Recurso não encontrado',
+  unauthorized: 'Não autorizado',
+  validation: 'Dados inválidos',
+  conflict: 'Conflito de dados',
+  internal: 'Erro interno',
+};
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key',
@@ -460,6 +528,7 @@ async function handleCreate(supabase: any, body: any, corsHeaders: any) {
   const clientTags = body.tags || ['Novo'];
 
   // Validações
+  // Validate required fields
   if (!clientName || !barberName || !serviceName || !dateTime || !unit_id) {
     return new Response(
       JSON.stringify({ 
@@ -469,6 +538,59 @@ async function handleCreate(supabase: any, body: any, corsHeaders: any) {
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
+
+  // === INPUT VALIDATION ===
+  // Validate client name length
+  const nameValidation = validateStringLength(clientName, MAX_NAME_LENGTH, 'Nome');
+  if (!nameValidation.valid) {
+    return new Response(
+      JSON.stringify({ success: false, error: nameValidation.error }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Validate and normalize phone
+  const phoneValidation = validatePhone(rawPhone);
+  if (!phoneValidation.valid) {
+    return new Response(
+      JSON.stringify({ success: false, error: phoneValidation.error }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Validate date format
+  const dateValidation = validateDate(dateTime);
+  if (!dateValidation.valid) {
+    return new Response(
+      JSON.stringify({ success: false, error: dateValidation.error }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Validate notes length
+  const notesValidation = validateStringLength(clientNotes, MAX_NOTES_LENGTH, 'Observações');
+  if (!notesValidation.valid) {
+    return new Response(
+      JSON.stringify({ success: false, error: notesValidation.error }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Validate and sanitize tags
+  const tagsValidation = validateTags(clientTags);
+  if (!tagsValidation.valid) {
+    return new Response(
+      JSON.stringify({ success: false, error: tagsValidation.error }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+  const sanitizedTags = tagsValidation.sanitized || ['Novo'];
+
+  // Sanitize text inputs
+  const sanitizedClientName = sanitizeText(clientName);
+  const sanitizedBarberName = sanitizeText(barberName);
+  const sanitizedServiceName = sanitizeText(serviceName);
+  const sanitizedNotes = clientNotes ? sanitizeText(clientNotes) : null;
 
   // Se unit_timezone não veio do enrichedBody, buscar da unidade
   let finalTimezone = timezone;
@@ -570,7 +692,7 @@ async function handleCreate(supabase: any, body: any, corsHeaders: any) {
         return new Response(
           JSON.stringify({ 
             success: false, 
-            error: `Erro ao criar cliente: ${clientCreateError.message}` 
+            error: GENERIC_ERRORS.database
           }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
@@ -1194,7 +1316,7 @@ async function handleRegisterClient(supabase: any, body: any, corsHeaders: any) 
   if (createError) {
     console.error('Error creating client:', createError);
     return new Response(
-      JSON.stringify({ success: false, error: `Erro ao cadastrar cliente: ${createError.message}` }),
+      JSON.stringify({ success: false, error: GENERIC_ERRORS.database }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
