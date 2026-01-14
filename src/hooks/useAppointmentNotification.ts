@@ -120,8 +120,8 @@ export function useAppointmentNotification() {
             if (processedCancelIdsRef.current.has(confirmKey)) return;
             processedCancelIdsRef.current.add(confirmKey);
 
-            // Check if vocal notification is enabled
-            if (!settings?.vocal_notification_enabled) return;
+            // Check if vocal confirmation notification is enabled
+            if (!settings?.vocal_confirmation_enabled) return;
 
             const message = `${updatedAppointment.client_name} confirmou presença para o agendamento das ${timeText}`;
             speak(message);
@@ -148,7 +148,7 @@ export function useAppointmentNotification() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [currentUnitId, settings?.vocal_notification_enabled, settings?.vocal_cancellation_enabled]);
+  }, [currentUnitId, settings?.vocal_notification_enabled, settings?.vocal_cancellation_enabled, settings?.vocal_confirmation_enabled]);
 }
 
 function speak(text: string) {

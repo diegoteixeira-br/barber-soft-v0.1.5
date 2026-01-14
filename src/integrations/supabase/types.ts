@@ -248,6 +248,7 @@ export type Database = {
           updated_at: string | null
           user_id: string
           vocal_cancellation_enabled: boolean | null
+          vocal_confirmation_enabled: boolean | null
           vocal_notification_enabled: boolean | null
           webhook_url: string | null
         }
@@ -277,6 +278,7 @@ export type Database = {
           updated_at?: string | null
           user_id: string
           vocal_cancellation_enabled?: boolean | null
+          vocal_confirmation_enabled?: boolean | null
           vocal_notification_enabled?: boolean | null
           webhook_url?: string | null
         }
@@ -306,6 +308,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           vocal_cancellation_enabled?: boolean | null
+          vocal_confirmation_enabled?: boolean | null
           vocal_notification_enabled?: boolean | null
           webhook_url?: string | null
         }
